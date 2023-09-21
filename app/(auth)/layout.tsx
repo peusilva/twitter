@@ -1,26 +1,28 @@
-import { ClerkProvider } from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
-import '../globals.css'
+import "../globals.css";
 
 export const metadata = {
-    title: "Twitter",
-    description: "A Next.js 13 Meta Twitter Application"
-}
+  title: "Twitter",
+  description: "A Next.js 13 Meta Twitter Application",
+};
 
-const inter = Inter({ subsets: ["latin"]})
+const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout ({ 
-    children 
+export default function RootLayout({
+  children,
 }: {
-    children: React.ReactNode 
+  children: React.ReactNode;
 }) {
-    return (
+  return (
     <ClerkProvider>
-        <html lang="en">
-            <body className={`${inter.className} bg-dark-1`}>
-                {children}
-            </body>
-        </html>
+      <html lang="en">
+        <body className={`${inter.className} bg-dark-1`}>
+          <div className="w-full flex justify-center items-center min-h-screen">
+            {children}
+          </div>
+        </body>
+      </html>
     </ClerkProvider>
-    )
+  );
 }
