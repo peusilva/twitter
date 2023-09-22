@@ -1,31 +1,31 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const tweetSchema = new mongoose.Schema({
-   text: { type: String, required: true},
-   author: {
+  text: { type: String, required: true },
+  author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
-   },
-   community: {
+  },
+  community: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Community',
-   },
-   createdAt: {
+    ref: "Community",
+  },
+  createdAt: {
     type: Date,
-    default: Date.now
-   },
-   parentId: {
-    type: String
-   },
-   children: [
+    default: Date.now,
+  },
+  parentId: {
+    type: String,
+  },
+  children: [
     {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tweet'
-    }
-   ]
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tweet",
+    },
+  ],
 });
 
-const Tweet = mongoose.models.Tweet || mongoose.model('Tweet', tweetSchema) ;
+const Tweet = mongoose.models.Tweet || mongoose.model("Tweet", tweetSchema);
 
 export default Tweet;
