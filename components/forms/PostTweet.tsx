@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useOrganization } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 
 // import { updateUser } from "@/lib/actions/user.actions";
@@ -21,47 +21,48 @@ import { TweetValidation } from "@/lib/validations/tweet";
 import { createTweet } from "@/lib/actions/tweet.actions";
 
 interface Props {
-    user: {
-        id: string;
-        objectId: string,
-        username: string,
-        name: string,
-        bio: string,
-        image: string;
-    };
-    btnTitle: string
+  user: {
+    id: string;
+    objectId: string;
+    username: string;
+    name: string;
+    bio: string;
+    image: string;
+  };
+  btnTitle: string;
 }
 
-function PostTweet( { userId }: { userId: string}) {
-    const router = useRouter();
-    const pathname = usePathname();
+function PostTweet({ userId }: { userId: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { organization } = useOrganization();
 
-    const form = useForm({
-        resolver: zodResolver(TweetValidation),
-        defaultValues: {
-            tweet: '',
-            accountId: userId
-        }
-    })
+  const form = useForm({
+    resolver: zodResolver(TweetValidation),
+    defaultValues: {
+      tweet: "",
+      accountId: userId,
+    },
+  });
 
-    const onSubmit = async (values: z.infer<typeof TweetValidation>) => {
-        await createTweet({
-            text: values.tweet,
-            author: userId,
-            communityId: null,
-            path: pathname,
-        });
+  const onSubmit = async (values: z.infer<typeof TweetValidation>) => {
+    await createTweet({
+      text: values.tweet,
+      author: userId,
+      communityId: organization ? organization.id : null,
+      path: pathname,
+    });
 
-        router.push('/')
-    }
+    router.push("/");
+  };
 
-    return (
-        <Form {...form}>
-      <form 
-      onSubmit={form.handleSubmit(onSubmit)}
-       className="mt-10 flex flex-col justify-start gap-10"
-       >
-         <FormField
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-10 flex flex-col justify-start gap-10"
+      >
+        <FormField
           control={form.control}
           name="tweet"
           render={({ field }) => (
@@ -70,20 +71,18 @@ function PostTweet( { userId }: { userId: string}) {
                 Content:
               </FormLabel>
               <FormControl className="no-focus border border-dark-4 bg-dark-3 text-light-1">
-                <Textarea
-                rows={8}
-                
-                {...field}
-                />
+                <Textarea rows={8} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-500">Post Tweet</Button>
-       </form>
-       </Form>
-    )
+        <Button type="submit" className="bg-primary-500">
+          Post Tweet
+        </Button>
+      </form>
+    </Form>
+  );
 }
 
 export default PostTweet;
