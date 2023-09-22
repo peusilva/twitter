@@ -33,7 +33,9 @@ function Topbar() {
                     width={24}
                     height={24}
                   />
-                  <p className="text-light-2 ml-2">Login</p>
+                  <p className="text-light-2 ml-2 text-small-regular">
+                    Login / Register
+                  </p>
                 </div>
               </SignInButton>
             </div>

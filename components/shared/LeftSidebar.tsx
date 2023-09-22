@@ -29,7 +29,9 @@ function LeftSidebar() {
             <Link
               href={link.route}
               key={link.label}
-              className={`leftsidebar_link ${isActive && "bg-primary-500"}`}
+              className={`leftsidebar_link ${
+                isActive && "bg-primary-500"
+              } hover:bg-light-4`}
             >
               <Image
                 src={link.imgURL}
@@ -52,7 +54,7 @@ function LeftSidebar() {
                 width={24}
                 height={24}
               />
-              <p className="text-light-2 max-lg:hidden">Login</p>
+              <p className="text-light-2 max-lg:hidden">Login / Register</p>
             </div>
           </SignInButton>
         </SignedOut>
