@@ -41,6 +41,7 @@ const TweetsTab = async ({ currentUserId, accountId, accountType }: Props) => {
           community={tweet.community} // todo
           createdAt={tweet.createdAt}
           comments={tweet.children}
+          likes={tweet.likes}
         />
       ))}
     </section>

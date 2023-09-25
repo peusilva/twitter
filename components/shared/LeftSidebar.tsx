@@ -11,6 +11,7 @@ import {
   SignedOut,
   useAuth,
 } from "@clerk/nextjs";
+import { fetchUser } from "@/lib/actions/user.actions";
 
 function LeftSidebar() {
   const router = useRouter();
@@ -24,7 +25,7 @@ function LeftSidebar() {
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
 
-          if (link.route === "/profile") link.route = `/profile/${userId}`;
+          if (link.route === "/profile") link.route = `${link.route}/${userId}`;
           return (
             <Link
               href={link.route}
@@ -59,7 +60,7 @@ function LeftSidebar() {
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <SignOutButton>
+          <SignOutButton signOutCallback={() => fetchUser("")}>
             <div className="flex cursor-pointer gap-4 p-4">
               <Image
                 src="/assets/logout.svg"

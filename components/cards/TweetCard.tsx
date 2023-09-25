@@ -1,6 +1,7 @@
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import LikeButton from "../shared/LikeButton";
 
 interface Props {
   id: string;
@@ -24,6 +25,7 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  likes?: string[];
 }
 
 const TweetCard = ({
@@ -36,6 +38,7 @@ const TweetCard = ({
   createdAt,
   comments,
   isComment,
+  likes,
 }: Props) => {
   return (
     <article
@@ -68,12 +71,9 @@ const TweetCard = ({
 
             <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
-                <Image
-                  src="/assets/heart-gray.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
+                <LikeButton
+                  tweetId={JSON.parse(JSON.stringify(id))}
+                  likes={likes}
                 />
                 <Link href={`/tweet/${id}`}>
                   <Image

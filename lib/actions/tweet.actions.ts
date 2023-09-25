@@ -237,3 +237,32 @@ export async function addCommentToTweet(
     throw new Error("Unable to add comment");
   }
 }
+
+export async function likeTweet(
+  tweetId: string,
+  currentUserId: string,
+  path: string
+) {
+  connectToDB();
+  try {
+    const originalTweet = await Tweet.findById(tweetId);
+
+    if (!originalTweet) {
+      throw new Error("Tweet not found");
+    }
+    //Add the user's _id to the likes array in the tweet
+    if (originalTweet.likes.includes(currentUserId)) {
+      console.log("already liked");
+    } else {
+      originalTweet.likes.push(currentUserId);
+    }
+
+    //Save the update original tweet to the database
+    await originalTweet.save();
+
+    revalidatePath(path);
+  } catch (error: any) {
+    console.error("Error while liking tweet:", error);
+    throw new Error("Unable to like tweet");
+  }
+}
