@@ -1,8 +1,8 @@
 "use client";
 import { redirect, usePathname } from "next/navigation";
 import Image from "next/image";
-import { likeTweet } from "@/lib/actions/tweet.actions";
-import { useState } from "react";
+import { likeTweet, unlikeTweet } from "@/lib/actions/tweet.actions";
+
 import { useAuth } from "@clerk/nextjs";
 
 interface Props {
@@ -13,9 +13,18 @@ interface Props {
 const LikeButton = ({ tweetId, likes }: Props) => {
   const path = usePathname();
   const user = useAuth();
+
+  const isLiked =
+    typeof likes === "object" &&
+    typeof user.userId === "string" &&
+    likes.includes(user.userId);
   const handleLike = async () => {
     if (typeof user.userId === "string") {
-      await likeTweet(tweetId, user.userId, path);
+      if (!isLiked) {
+        await likeTweet(tweetId, user.userId, path);
+      } else if (isLiked) {
+        await unlikeTweet(tweetId, user.userId, path);
+      }
     } else {
       redirect("/sign-in");
     }

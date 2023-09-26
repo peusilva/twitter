@@ -266,3 +266,25 @@ export async function likeTweet(
     throw new Error("Unable to like tweet");
   }
 }
+
+export async function unlikeTweet(
+  tweetId: string,
+  currentUserId: string,
+  path: string
+) {
+  connectToDB();
+  try {
+    const tweet = await Tweet.findById(tweetId);
+    if (!tweet) {
+      throw new Error("Tweet not found");
+    }
+    tweet.likes.splice(tweet.likes.indexOf(currentUserId), 1);
+
+    await tweet.save();
+
+    revalidatePath(path);
+  } catch (error: any) {
+    console.error("Error while unliking tweet:", error);
+    throw new Error("Unable to unlike tweet");
+  }
+}
