@@ -181,3 +181,20 @@ export async function fetchActivities(userId: string) {
     throw error;
   }
 }
+
+export async function fetchLikeActivities(userId: string) {
+  try {
+    connectToDB();
+    const userTweets = await Tweet.find({ author: userId });
+
+    const likedUserIds = userTweets.reduce((acc, userTweet) => {
+      return acc.concat(userTweet.likes);
+    }, []);
+
+    const likedUserProfiles = await User.find({ id: { $in: likedUserIds } });
+    return likedUserProfiles;
+  } catch (error) {
+    console.error("Error fetching likes: ", error);
+    throw error;
+  }
+}

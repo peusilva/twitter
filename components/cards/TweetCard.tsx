@@ -69,21 +69,35 @@ const TweetCard = ({
             </Link>
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
 
-            <div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
+            <div className={`${isComment && "mb-1"} mt-3 flex flex-col gap-3`}>
               <div className="flex gap-3.5">
-                <LikeButton
-                  tweetId={JSON.parse(JSON.stringify(id))}
-                  likes={likes}
-                />
-                <Link href={`/tweet/${id}`}>
-                  <Image
-                    src="/assets/reply.svg"
-                    alt="reply"
-                    width={24}
-                    height={24}
-                    className="cursor-pointer object-contain"
+                <div className="gap-0 flex">
+                  <LikeButton
+                    tweetId={JSON.parse(JSON.stringify(id))}
+                    likes={likes}
                   />
-                </Link>
+                  {likes !== undefined && likes.length > 0 && (
+                    <span className="text-subtle-medium text-gray-1 flex items-center">
+                      {likes.length}
+                    </span>
+                  )}
+                </div>
+                <div className="gap-0 flex">
+                  <Link href={`/tweet/${id}`}>
+                    <Image
+                      src="/assets/reply.svg"
+                      alt="reply"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer object-contain"
+                    />
+                  </Link>
+                  {comments !== undefined && comments.length > 0 && (
+                    <span className="text-subtle-medium text-gray-1 flex items-center">
+                      {comments.length}
+                    </span>
+                  )}
+                </div>
                 <Image
                   src="/assets/repost.svg"
                   alt="repost"
@@ -113,13 +127,16 @@ const TweetCard = ({
         {/* TODO: Delete tweet */}
         {/* TODO: Show comment logos */}
       </div>
+      <div className="text-subtle-medium text-gray-1 mt-2">
+        <p>{formatDateString(createdAt)}</p>
+      </div>
       {!isComment && community && (
         <Link
           href={`/communities/${community.id}`}
-          className="mt-5 flex items-center"
+          className="mt-2 flex items-center"
         >
           <p className="text-subtle-medium text-gray-1">
-            {formatDateString(createdAt)} - {community.name} Community
+            {community.name} Community
           </p>
           <Image
             src={community.image}
